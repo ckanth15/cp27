@@ -1,0 +1,223 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>404 — Page Not Found</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f5f7fa;color:#333;font-size:13px;height:100vh;overflow:hidden}
+.fake404{display:flex;justify-content:center;align-items:center;height:100vh;background:#fff;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.fake404 h1{font-size:48px;color:#24292f;margin-bottom:8px}.fake404 p{color:#57606a;font-size:16px;margin-bottom:16px}
+.fake404 a{color:#0969da;text-decoration:none;font-size:14px}
+.app{display:none}
+.bar{background:#1a5490;color:#fff;padding:6px 12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
+.bar h1{font-size:14px}.bar span{font-size:10px;opacity:.8}
+.bar a{color:#8bb8e8;font-size:10px;text-decoration:none;border:1px solid #8bb8e8;padding:2px 8px;border-radius:3px;margin-left:4px}
+.bar a:hover{background:#fff;color:#1a5490}
+.wrap{display:flex;height:calc(100vh - 34px)}
+.left{width:300px;min-width:260px;border-right:1px solid #ddd;display:flex;flex-direction:column;background:#fff}
+.right{flex:1;overflow-y:auto;padding:12px;background:#f9fafb}
+.search{padding:6px;border-bottom:1px solid #eee;background:#f5f7fa}
+.search input{width:100%;padding:5px 7px;border:1px solid #ccc;border-radius:4px;font-size:11px}
+.cbox{padding:6px;border-bottom:1px solid #ddd;background:#fef9e7}
+.cbox textarea{width:100%;height:50px;padding:5px;border:1px solid #ccc;border-radius:4px;font-size:10px;font-family:monospace;resize:vertical}
+.cbox button{margin-top:3px;padding:3px 8px;background:#1a5490;color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:10px}
+.sections{overflow-y:auto;flex:1}
+.sec-head{padding:5px 8px;background:#e8f0fe;font-weight:bold;color:#1a5490;font-size:10px;text-transform:uppercase;border-bottom:1px solid #ddd;position:sticky;top:0;z-index:5}
+.item{padding:5px 8px;border-bottom:1px solid #f0f0f0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:11px}
+.item:hover{background:#e8f4fd}.item.active{background:#d0e8f7;border-left:3px solid #1a5490}
+.badge{display:inline-block;padding:0 4px;border-radius:2px;font-size:9px;font-weight:bold}
+.b-s{background:#D5F5E3;color:#2E7D32}.b-m{background:#FFF9C4;color:#F57F17}.b-r{background:#FDDDDD;color:#C62828}
+.mt{background:#C8E6C9;color:#2E7D32;font-size:9px;padding:0 3px;border-radius:2px;margin-left:3px}
+.card{background:#fff;border:1px solid #ddd;border-radius:6px;padding:12px;margin-bottom:10px}
+.card h2{color:#1a5490;font-size:15px;margin-bottom:6px;border-bottom:1px solid #eee;padding-bottom:4px}
+.card h3{color:#1a5490;font-size:12px;margin:8px 0 4px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin:3px 0}
+.field{flex:1;min-width:120px}.field label{font-size:9px;color:#888;text-transform:uppercase}.field p{font-size:12px;margin-top:1px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.link{color:#0563C1;text-decoration:none;font-size:12px}.link:hover{text-decoration:underline}
+.loading{text-align:center;padding:40px;color:#888}
+@media(max-width:768px){.wrap{flex-direction:column}.left{width:100%;height:40vh;min-width:auto}.right{height:60vh}}
+</style></head><body>
+
+<div class="fake404" id="wall">
+<svg height="54" viewBox="0 0 24 24" width="54"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" fill="#24292f"/></svg>
+<h1>404</h1>
+<p>There isn't a GitHub Pages site here.</p>
+<a href="https://docs.github.com/pages">Read the full documentation →</a>
+</div>
+
+<div class="app" id="app">
+<div class="bar">
+<h1>College Planner 2027</h1>
+<span>GPA 3.7 | SAT 1320 | Cybersecurity & CS | F-2 Visa</span>
+<div>
+<a href="https://docs.google.com/spreadsheets/d/1jXBB6CA8eVNcbR2mwu2xPWCdlo_lNjWfJNyGVO3io2c/edit" target="_blank">📊 Edit Sheet</a>
+<a href="#" onclick="loadData();return false">🔄 Refresh</a>
+<a href="#" onclick="lockOut();return false">🔒 Lock</a>
+</div>
+</div>
+<div class="wrap">
+<div class="left">
+<div class="cbox">
+<div style="font-weight:bold;font-size:10px;color:#1a5490;margin-bottom:2px">📋 Paste counselor list:</div>
+<textarea id="cIn" placeholder="Purdue&#10;Penn State&#10;Georgia Tech..."></textarea>
+<button onclick="compare()">Compare</button>
+<span id="cSt" style="font-size:9px;margin-left:4px;color:#666"></span>
+</div>
+<div class="search"><input type="text" id="sb" placeholder="🔍 Search..." oninput="filter()"></div>
+<div class="sections" id="list"><div class="loading">Loading...</div></div>
+</div>
+<div class="right" id="rp"><div class="card"><h2>Loading...</h2></div></div>
+</div>
+</div>
+
+<script>
+const SHEET_CSV='https://docs.google.com/spreadsheets/d/1jXBB6CA8eVNcbR2mwu2xPWCdlo_lNjWfJNyGVO3io2c/gviz/tq?tqx=out:csv';
+const MAGIC='Ri$B0b2027';
+const TOKEN='6I9maYMnoFhq8WVXkmjKIQ';
+const AUTH_KEY='_cp27x';
+let DB=[],cSet=new Set(),activeI=-1;
+
+// === AUTH: magic word required, remembered per device for 90 days ===
+function isAuthed(){
+try{const v=localStorage.getItem(AUTH_KEY);if(!v)return false;
+const exp=parseInt(v);return Date.now()<exp;}catch(e){return false;}
+}
+function setAuth(){
+try{localStorage.setItem(AUTH_KEY,String(Date.now()+90*24*60*60*1000));}catch(e){}
+}
+function clearAuth(){
+try{localStorage.removeItem(AUTH_KEY);}catch(e){}
+}
+
+// Check auth on load — URL token alone does NOT unlock
+if(isAuthed()){unlock();}
+
+// Cheat code listener — works on 404 page
+let typed='';
+document.addEventListener('keydown',function(e){
+if(document.getElementById('app').style.display==='block')return;
+if(e.key.length===1){typed+=e.key;if(typed.length>MAGIC.length)typed=typed.slice(-MAGIC.length);
+if(typed===MAGIC){setAuth();location.hash=TOKEN;unlock();}}
+if(e.key==='Backspace')typed=typed.slice(0,-1);
+});
+
+function unlock(){
+document.getElementById('wall').style.display='none';
+document.getElementById('app').style.display='block';
+document.title='College Planner 2027';
+location.hash=TOKEN;
+loadData();
+}
+
+function lockOut(){
+clearAuth();
+document.getElementById('app').style.display='none';
+document.getElementById('wall').style.display='flex';
+document.title='404 — Page Not Found';
+location.hash='';
+}
+
+function parseCSV(t){
+const rows=[];let cur='',inQ=false,row=[],i=0;
+while(i<t.length){const c=t[i];
+if(c==='"'){if(inQ&&t[i+1]==='"'){cur+='"';i+=2;}else{inQ=!inQ;i++;}}
+else if(c===','&&!inQ){row.push(cur.trim());cur='';i++;}
+else if((c==='\n'||c==='\r')&&!inQ){row.push(cur.trim());if(row.length>1)rows.push(row);row=[];cur='';if(c==='\r'&&t[i+1]==='\n')i++;i++;}
+else{cur+=c;i++;}}
+if(cur||row.length){row.push(cur.trim());if(row.length>1)rows.push(row);}
+return rows;
+}
+
+function loadData(){
+document.getElementById('list').innerHTML='<div class="loading">Loading...</div>';
+fetch(SHEET_CSV+'&_t='+Date.now()).then(r=>r.text()).then(t=>{
+const rows=parseCSV(t);DB=[];
+for(let i=1;i<rows.length;i++){const r=rows[i];if(r.length<10)continue;
+DB.push({n:r[0],s:r[1],cat:r[2],ch:r[3],cy:r[4],nsa:r[5],w:r[6],cr:r[7],co:r[8],h4:r[9],
+css:r[10],me:r[11],ao:r[12],ad:r[13],dt:r[14],dr:r[15],af:r[16],
+applied:r[17]||'—',essay:r[18]||'—',supp:r[19]||'—',trans:r[20]||'—',recs:r[21]||'—',decision:r[22]||'—',
+comments:r[23]||'',url:r[24]||'',g:r[25]||''});}
+buildList();showWelcome();
+}).catch(e=>{document.getElementById('list').innerHTML='<div class="loading" style="color:red">Failed to load.<br><br>Publish sheet first:<br>Sheet → File → Share → Publish to web → CSV → Publish</div>';});
+}
+
+const AL={"rit":"RIT","drexel":"Drexel","george mason":"George Mason","gmu":"George Mason","south florida":"South Florida","usf":"South Florida","northeastern":"Northeastern","penn state":"Penn State","texas a&m":"Texas A&M","tamu":"Texas A&M","cal poly pomona":"Cal Poly Pomona","cal poly slo":"Cal Poly SLO","cal poly":"Cal Poly SLO","cal state fullerton":"Cal State Fullerton","sjsu":"San Jose State","cal state long":"Cal State Long","uc santa cruz":"UC Santa Cruz","uc riverside":"UC Riverside","ut dallas":"UT Dallas","utd":"UT Dallas","oregon tech":"Oregon Tech","university of georgia":"University of Georgia","uga":"University of Georgia","georgia southern":"Georgia Southern","georgia tech":"Georgia Tech","gatech":"Georgia Tech","toronto":"Toronto","washington":"Washington","purdue":"Purdue","texas tech":"Texas Tech","santa clara":"Santa Clara","utsa":"UT San Antonio","kennesaw":"Kennesaw","ut austin":"UT Austin","ucf":"Central Florida","fsu":"Florida State","fiu":"Florida Intl","nc state":"NC State","virginia tech":"Virginia Tech","asu":"Arizona State","birmingham":"Birmingham","warwick":"Warwick","kings college":"King's College","king's":"King's College"};
+
+function ms(input){const l=input.toLowerCase().trim();if(!l)return[];for(const[k,v]of Object.entries(AL)){if(l.includes(k))return DB.filter(s=>s.n.toLowerCase().includes(v.toLowerCase()));}return DB.filter(s=>s.n.toLowerCase().includes(l));}
+function bc(c){return c==="Safety"?"b-s":c==="Match"?"b-m":"b-r"}
+
+function showWelcome(){
+document.getElementById('rp').innerHTML=`<div class="card"><h2>👆 Click any school on the left</h2>
+<div class="grid2">
+<div class="card" style="margin:0"><h3>Profile</h3><p>Lynbrook HS | GPA 3.7 | SAT 1320<br>Cybersecurity & CS | F-2 Visa<br>SJ, CA → Alpharetta, GA</p></div>
+<div class="card" style="margin:0"><h3>Aid</h3><p>❌ FAFSA | ✅ CSS (5 schools)<br>✅ Auto-merit: ASU, UA, UTD<br>✅ Loans: MPOWER (no cosigner)</p></div>
+</div>
+<p style="margin-top:8px;font-size:11px;color:#666">📊 Data from <a href="https://docs.google.com/spreadsheets/d/1jXBB6CA8eVNcbR2mwu2xPWCdlo_lNjWfJNyGVO3io2c/edit" target="_blank" class="link">Google Sheet</a> — edit there, 🔄 refresh here. <b>${DB.length} schools loaded.</b><br>🔒 Lock button (top right) locks the page until magic word is typed again.</p></div>`;
+}
+
+function show(i){
+activeI=i;const s=DB[i];
+document.querySelectorAll('.item').forEach(e=>e.classList.remove('active'));
+const el=document.querySelector(`[data-i="${i}"]`);if(el)el.classList.add('active');
+const ic=cSet.has(s.n);
+document.getElementById('rp').innerHTML=`
+<div class="card"><h2><a href="${s.url}" target="_blank" class="link">${s.n}</a> ${ic?'<span class="mt">✓ Counselor</span>':''} <span class="badge ${bc(s.cat)}">${s.cat} ${s.ch}</span></h2>
+<div class="grid3">
+<div class="field"><label>Cost/yr (F-1)</label><p><b>${s.co}</b></p></div>
+${s.h4?`<div class="field"><label>H-4 Waiver</label><p style="color:#2E7D32;font-weight:bold">${s.h4}/yr</p></div>`:''}
+<div class="field"><label>App Fee</label><p>${s.af}</p></div>
+</div>
+<div class="row"><div class="field"><label>Cyber Program</label><p>${s.cy}</p></div><div class="field"><label>NSA/CAE</label><p>${s.nsa}</p></div></div>
+<div class="row"><div class="field"><label>Weather</label><p>${s.w}</p></div><div class="field"><label>Crime</label><p>${s.cr}</p></div>
+<div class="field"><label>CSS?</label><p>${s.css.includes('Yes')?'✅ '+s.css:'❌ No'}</p></div><div class="field"><label>Merit</label><p>${s.me}</p></div></div></div>
+<div class="card"><h3>📅 Timeline</h3>
+<div class="grid3"><div class="field"><label>Opens</label><p>${s.ao||'—'}</p></div><div class="field"><label>Deadline</label><p><b>${s.ad}</b></p></div>
+<div class="field"><label>Type</label><p>${s.dt}</p></div><div class="field"><label>Decision</label><p>${s.dr}</p></div>
+<div class="field"><label>Website</label><p><a href="${s.url}" target="_blank" class="link">Visit →</a></p></div></div></div>
+<div class="card"><h3>📝 Tracking</h3>
+<div class="grid3">
+<div class="field"><label>Applied</label><p><b>${s.applied}</b></p></div>
+<div class="field"><label>Common App Essay</label><p>${s.essay}</p></div>
+<div class="field"><label>Supplemental</label><p>${s.supp}</p></div>
+<div class="field"><label>Transcripts</label><p>${s.trans}</p></div>
+<div class="field"><label>Recs</label><p>${s.recs}</p></div>
+<div class="field"><label>Decision</label><p>${s.decision}</p></div>
+</div>
+<p style="font-size:10px;color:#888;margin-top:6px">✏️ Edit in <a href="https://docs.google.com/spreadsheets/d/1jXBB6CA8eVNcbR2mwu2xPWCdlo_lNjWfJNyGVO3io2c/edit" target="_blank" class="link">Google Sheet</a> → 🔄 Refresh</p></div>
+${s.comments?`<div class="card"><h3>💬 Comments</h3><p>${s.comments}</p></div>`:''}`;
+}
+
+function buildList(){
+const groups=[
+{l:'🏠 Georgia',f:s=>s.g==='Georgia'},
+{l:'🇺🇸 California',f:s=>s.g==='California'},
+{l:'🇺🇸 Texas',f:s=>s.g==='Texas'},
+{l:'🇺🇸 Florida',f:s=>s.g==='Florida'},
+{l:'🇺🇸 Other US',f:s=>s.g==='Other US'},
+{l:'🇺🇸 Private (CSS)',f:s=>s.g==='Private CSS'},
+{l:'🌍 International',f:s=>s.g==='International'},
+];
+let h='';
+groups.forEach(g=>{
+const sc=DB.map((s,i)=>({...s,i})).filter(g.f);
+if(!sc.length)return;
+h+=`<div class="sec-head">${g.l} (${sc.length})</div>`;
+sc.forEach(s=>{
+const ic=cSet.has(s.n);
+h+=`<div class="item${activeI===s.i?' active':''}" data-i="${s.i}" data-nm="${s.n.toLowerCase()}" onclick="show(${s.i})">
+<div style="flex:1"><b style="font-size:11px">${s.n}</b>${ic?'<span class="mt">✓</span>':''}</div>
+<div style="text-align:right"><div style="font-weight:bold;color:#1a5490;font-size:10px">${s.co}</div><span class="badge ${bc(s.cat)}">${s.cat}</span></div></div>`;
+});});
+document.getElementById('list').innerHTML=h||'<div class="loading">No data.</div>';
+}
+
+function filter(){const q=document.getElementById('sb').value.toLowerCase();document.querySelectorAll('.item').forEach(e=>{e.style.display=e.dataset.nm.includes(q)?'':'none';});}
+
+function compare(){
+const input=document.getElementById('cIn').value;
+const lines=input.split('\n').map(l=>l.replace(/^\d+\.?\s*/,'').replace(/\{.*?\}/g,'').trim()).filter(l=>l&&!/^tier\s*\d/i.test(l));
+cSet=new Set();lines.forEach(l=>{ms(l).forEach(s=>cSet.add(s.n));});
+document.getElementById('cSt').innerHTML=`✓${cSet.size} matched`;
+buildList();
+}
+</script></body></html>
