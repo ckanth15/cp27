@@ -5,7 +5,12 @@
 body{font-family:system-ui,sans-serif;background:#f5f7fa;color:#333;font-size:13px;height:100vh;overflow:hidden}
 .fake404{display:flex;justify-content:center;align-items:center;height:100vh;background:#fff;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
 .fake404 h1{font-size:48px;color:#24292f;margin-bottom:8px}.fake404 p{color:#57606a;font-size:16px;margin-bottom:16px}
-.fake404 a{color:#0969da;text-decoration:none;font-size:14px}
+.fake404 a{color:#0969da;text-decoration:none;font-size:14px;cursor:pointer}
+.fake404 a:hover{text-decoration:underline}
+#passBox{display:none;margin-top:16px}
+#passBox input{padding:6px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px;width:200px}
+#passBox button{padding:6px 12px;border:none;background:#0969da;color:#fff;border-radius:4px;font-size:13px;cursor:pointer;margin-left:4px}
+#passErr{color:#cf222e;font-size:12px;margin-top:6px;display:none}
 .app{display:none}
 .bar{background:#1a5490;color:#fff;padding:6px 12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
 .bar h1{font-size:14px}.bar span{font-size:10px;opacity:.8}
@@ -42,7 +47,11 @@ body{font-family:system-ui,sans-serif;background:#f5f7fa;color:#333;font-size:13
 <svg height="54" viewBox="0 0 24 24" width="54"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" fill="#24292f"/></svg>
 <h1>404</h1>
 <p>There isn't a GitHub Pages site here.</p>
-<a href="https://docs.github.com/pages">Read the full documentation →</a>
+<a onclick="document.getElementById('passBox').style.display='block';document.getElementById('passInput').focus();">Read the full documentation →</a>
+<div id="passBox">
+<div><input type="password" id="passInput" placeholder="do you magic" onkeydown="if(event.key==='Enter')tryPass()"><button onclick="tryPass()">→</button></div>
+<div id="passErr">Invalid code</div>
+</div>
 </div>
 
 <div class="app" id="app">
@@ -77,29 +86,17 @@ const TOKEN='6I9maYMnoFhq8WVXkmjKIQ';
 const AUTH_KEY='_cp27x';
 let DB=[],cSet=new Set(),activeI=-1;
 
-// === AUTH: magic word required, remembered per device for 90 days ===
-function isAuthed(){
-try{const v=localStorage.getItem(AUTH_KEY);if(!v)return false;
-const exp=parseInt(v);return Date.now()<exp;}catch(e){return false;}
-}
-function setAuth(){
-try{localStorage.setItem(AUTH_KEY,String(Date.now()+90*24*60*60*1000));}catch(e){}
-}
-function clearAuth(){
-try{localStorage.removeItem(AUTH_KEY);}catch(e){}
-}
+function isAuthed(){try{const v=localStorage.getItem(AUTH_KEY);if(!v)return false;return Date.now()<parseInt(v);}catch(e){return false;}}
+function setAuth(){try{localStorage.setItem(AUTH_KEY,String(Date.now()+90*24*60*60*1000));}catch(e){}}
+function clearAuth(){try{localStorage.removeItem(AUTH_KEY);}catch(e){}}
 
-// Check auth on load — URL token alone does NOT unlock
-if(isAuthed()){unlock();}
+if(isAuthed())unlock();
 
-// Cheat code listener — works on 404 page
-let typed='';
-document.addEventListener('keydown',function(e){
-if(document.getElementById('app').style.display==='block')return;
-if(e.key.length===1){typed+=e.key;if(typed.length>MAGIC.length)typed=typed.slice(-MAGIC.length);
-if(typed===MAGIC){setAuth();location.hash=TOKEN;unlock();}}
-if(e.key==='Backspace')typed=typed.slice(0,-1);
-});
+function tryPass(){
+const v=document.getElementById('passInput').value;
+if(v===MAGIC){setAuth();location.hash=TOKEN;unlock();}
+else{document.getElementById('passErr').style.display='block';document.getElementById('passInput').value='';setTimeout(()=>{document.getElementById('passErr').style.display='none';},2000);}
+}
 
 function unlock(){
 document.getElementById('wall').style.display='none';
@@ -113,6 +110,7 @@ function lockOut(){
 clearAuth();
 document.getElementById('app').style.display='none';
 document.getElementById('wall').style.display='flex';
+document.getElementById('passBox').style.display='none';
 document.title='404 — Page Not Found';
 location.hash='';
 }
@@ -152,7 +150,7 @@ document.getElementById('rp').innerHTML=`<div class="card"><h2>👆 Click any sc
 <div class="card" style="margin:0"><h3>Profile</h3><p>Lynbrook HS | GPA 3.7 | SAT 1320<br>Cybersecurity & CS | F-2 Visa<br>SJ, CA → Alpharetta, GA</p></div>
 <div class="card" style="margin:0"><h3>Aid</h3><p>❌ FAFSA | ✅ CSS (5 schools)<br>✅ Auto-merit: ASU, UA, UTD<br>✅ Loans: MPOWER (no cosigner)</p></div>
 </div>
-<p style="margin-top:8px;font-size:11px;color:#666">📊 Data from <a href="https://docs.google.com/spreadsheets/d/1jXBB6CA8eVNcbR2mwu2xPWCdlo_lNjWfJNyGVO3io2c/edit" target="_blank" class="link">Google Sheet</a> — edit there, 🔄 refresh here. <b>${DB.length} schools loaded.</b><br>🔒 Lock button (top right) locks the page until magic word is typed again.</p></div>`;
+<p style="margin-top:8px;font-size:11px;color:#666">📊 Data from <a href="https://docs.google.com/spreadsheets/d/1jXBB6CA8eVNcbR2mwu2xPWCdlo_lNjWfJNyGVO3io2c/edit" target="_blank" class="link">Google Sheet</a> — edit there, 🔄 refresh here. <b>${DB.length} schools loaded.</b><br>🔒 Lock button locks the page until password is entered again.</p></div>`;
 }
 
 function show(i){
