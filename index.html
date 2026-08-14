@@ -1,63 +1,94 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%23059669'/><path d='M32 16L12 26l20 10 20-10L32 16z' fill='%23fff'/><path d='M18 29v10c0 4 6.3 8 14 8s14-4 14-8V29L32 39 18 29z' fill='%23d1fae5'/><rect x='48' y='26' width='3' height='16' rx='1' fill='%23fff'/><circle cx='49.5' cy='44' r='2.5' fill='%23fbbf24'/></svg>"><title>404 — Page Not Found</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%234f46e5'/><path d='M32 16L12 26l20 10 20-10L32 16z' fill='%23fff'/><path d='M18 29v10c0 4 6.3 8 14 8s14-4 14-8V29L32 39 18 29z' fill='%23c7d2fe'/><rect x='48' y='26' width='3' height='16' rx='1' fill='%23fff'/><circle cx='49.5' cy='44' r='2.5' fill='%23fbbf24'/></svg>">
+<title>404 — Page Not Found</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,sans-serif;background:#f5f7fa;color:#333;font-size:13px;height:100vh;overflow:hidden}
-.fake404{display:flex;justify-content:center;align-items:center;height:100vh;background:#fff;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+body{font-family:'Inter',system-ui,sans-serif;background:#f8fafc;color:#1e293b;font-size:13px;height:100vh;overflow:hidden}
+
+/* === 404 GATE === */
+.fake404{display:flex;justify-content:center;align-items:center;height:100vh;background:#fff;flex-direction:column}
 .fake404 h1{font-size:48px;color:#24292f;margin-bottom:8px}.fake404 p{color:#57606a;font-size:16px;margin-bottom:16px}
 .fake404 a{color:#0969da;text-decoration:none;font-size:14px;cursor:pointer}
 #passBox{display:none;margin-top:16px}
-#passBox input{padding:6px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px;width:200px}
-#passBox button{padding:6px 12px;border:none;background:#0969da;color:#fff;border-radius:4px;font-size:13px;cursor:pointer;margin-left:4px}
-#passErr{color:#cf222e;font-size:12px;margin-top:6px;display:none}
+#passBox input{padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;width:200px;font-family:'Inter',sans-serif}
+#passBox input:focus{outline:2px solid #6366f1;border-color:#6366f1}
+#passBox button{padding:8px 14px;border:none;background:#4f46e5;color:#fff;border-radius:6px;font-size:13px;cursor:pointer;margin-left:6px;font-family:'Inter',sans-serif}
+#passBox button:hover{background:#4338ca}
+#passErr{color:#dc2626;font-size:12px;margin-top:8px;display:none}
+
+/* === APP LAYOUT === */
 .app{display:none}
-.bar{background:linear-gradient(135deg,#1a5490,#0d3a6e);color:#fff;padding:8px 16px;display:flex;justify-content:space-between;align-items:center}
-.bar h1{font-size:14px}.bar a{color:#8bb8e8;font-size:10px;text-decoration:none;border:1px solid #8bb8e8;padding:2px 8px;border-radius:3px;margin-left:4px}.bar a:hover{background:#fff;color:#1a5490}
-.ticker{background:#0d3a6e;padding:4px 10px;display:flex;gap:6px;overflow-x:auto;align-items:center;min-height:28px;flex-wrap:nowrap}
-.ticker-label{color:#8bb8e8;font-size:9px;font-weight:bold;white-space:nowrap;text-transform:uppercase;letter-spacing:.5px;margin-right:2px}
-.chip{background:rgba(255,255,255,.15);color:#fff;padding:2px 8px;border-radius:12px;font-size:10px;cursor:pointer;white-space:nowrap;border:1px solid rgba(255,255,255,.2);display:inline-flex;align-items:center;gap:3px}
-.chip:hover{background:rgba(255,255,255,.3)}
-.chip-deadline{border-color:#ff6b6b;background:rgba(255,107,107,.25)}
-.chip-urgent{border-color:#ff0;background:rgba(255,255,0,.2);color:#ff0;animation:pulse 1.5s infinite}
-.chip-pin{border-color:#4caf50;background:rgba(76,175,80,.2)}
-.chip .x{opacity:.5;margin-left:2px;cursor:pointer}.chip .x:hover{opacity:1}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
-.wrap{display:flex;height:calc(100vh - 62px)}
-.left{width:300px;min-width:260px;border-right:none;display:flex;flex-direction:column;background:#1a1f36;color:#c7d2fe}
-.right{flex:1;overflow-y:auto;padding:16px 20px;background:#0f172a}
-.search{padding:6px;border-bottom:1px solid #2d3561;background:#151929}
-.search input{width:100%;padding:5px 7px;border:1px solid #3d4574;border-radius:4px;font-size:11px;background:#1e2440;color:#c7d2fe}
-.search input::placeholder{color:#818cf8}
-.cbox{padding:6px;border-bottom:1px solid #2d3561;background:#151929}
-.cbox textarea{width:100%;height:50px;padding:5px;border:1px solid #3d4574;border-radius:4px;font-size:10px;font-family:monospace;resize:vertical;background:#1e2440;color:#c7d2fe}
-.cbox textarea::placeholder{color:#818cf8}
-.cbox button{margin-top:3px;padding:3px 8px;background:#6366f1;color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:10px}
-.cbox button:hover{background:#4f46e5}
+.bar{background:#4f46e5;color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center}
+.bar h1{font-size:16px;font-weight:700;letter-spacing:-.3px}
+.bar-links a{color:rgba(255,255,255,.85);font-size:11px;text-decoration:none;padding:4px 10px;border-radius:5px;margin-left:4px;background:rgba(255,255,255,.12);font-weight:500}
+.bar-links a:hover{background:rgba(255,255,255,.25)}
+
+/* === TICKER === */
+.ticker{background:#4338ca;padding:6px 16px;display:flex;gap:8px;overflow-x:auto;align-items:center;min-height:32px}
+.ticker-label{color:rgba(255,255,255,.6);font-size:9px;font-weight:700;white-space:nowrap;text-transform:uppercase;letter-spacing:.8px;margin-right:4px}
+.chip{background:rgba(255,255,255,.12);color:#fff;padding:3px 10px;border-radius:20px;font-size:10px;cursor:pointer;white-space:nowrap;border:1px solid rgba(255,255,255,.15);font-weight:500}
+.chip:hover{background:rgba(255,255,255,.25)}
+.chip-deadline{border-color:#fca5a5;background:rgba(239,68,68,.15);color:#fecaca}
+.chip-urgent{border-color:#fbbf24;background:rgba(251,191,36,.15);color:#fef08a;animation:pulse 1.5s infinite}
+.chip-pin{border-color:#86efac;background:rgba(34,197,94,.1);color:#bbf7d0}
+.chip .x{opacity:.5;margin-left:3px;cursor:pointer}.chip .x:hover{opacity:1}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* === TWO PANEL === */
+.wrap{display:flex;height:calc(100vh - 76px)}
+.left{width:310px;min-width:270px;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;background:#fff}
+.right{flex:1;overflow-y:auto;padding:20px 28px;background:#f8fafc}
+
+/* === LEFT PANEL === */
+.cbox{padding:10px;border-bottom:1px solid #e2e8f0;background:#faf5ff}
+.cbox-label{font-weight:600;font-size:10px;color:#6d28d9;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.cbox textarea{width:100%;height:52px;padding:8px;border:1px solid #d1d5db;border-radius:6px;font-size:11px;font-family:monospace;resize:vertical;background:#fff;color:#374151}
+.cbox textarea::placeholder{color:#9ca3af}
+.cbox-row{display:flex;align-items:center;gap:6px;margin-top:6px}
+.cbox button{padding:5px 14px;background:#6d28d9;color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:10px;font-weight:600}
+.cbox button:hover{background:#5b21b6}
+
+.search{padding:8px 10px;border-bottom:1px solid #e2e8f0}
+.search input{width:100%;padding:7px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:11px;background:#f9fafb;color:#374151}
+.search input:focus{outline:2px solid #6366f1;border-color:#6366f1;background:#fff}
+.search input::placeholder{color:#9ca3af}
+
 .sections{overflow-y:auto;flex:1}
-.sec-head{padding:6px 10px;background:#6366f1;font-weight:bold;color:#fff;font-size:10px;text-transform:uppercase;border-bottom:1px solid #4f46e5;position:sticky;top:0;z-index:5;cursor:pointer;display:flex;justify-content:space-between;align-items:center;letter-spacing:.5px;user-select:none}
-.sec-head:hover{background:#4f46e5}
-.sec-head .arrow{font-size:8px;transition:transform .2s}
-.sec-head .arrow.collapsed{transform:rotate(-90deg)}
-.sec-items{overflow:hidden;transition:max-height .3s ease}
-.sec-items.collapsed{max-height:0!important}
-.item{padding:6px 10px;border-bottom:1px solid #2d3561;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#c7d2fe;background:#1a1f36}
-.item:hover{background:#252b48}.item.active{background:#312e81;border-left:3px solid #a5b4fc;color:#fff}
-.badge{display:inline-block;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:600}
-.b-s{background:#312e81;color:#a5b4fc}.b-m{background:#92400e;color:#fde68a}.b-r{background:#991b1b;color:#fca5a5}
-.mt{background:#312e81;color:#a5b4fc;font-size:9px;padding:0 4px;border-radius:2px;margin-left:3px}
-.pin-btn{cursor:pointer;font-size:16px;opacity:.5;margin-left:6px;filter:brightness(1.2)}.pin-btn:hover{opacity:1}.pin-btn.pinned{opacity:1}
-.card{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
-.card h2{color:#a5b4fc;font-size:16px;margin-bottom:8px;border-bottom:2px solid #334155;padding-bottom:6px;letter-spacing:-.3px}
-.card h3{color:#818cf8;font-size:13px;margin:12px 0 6px;font-weight:600;letter-spacing:-.2px}
-.row{display:flex;gap:10px;flex-wrap:wrap;margin:3px 0}
-.field{flex:1;min-width:120px}.field label{font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:600}.field p{font-size:13px;margin-top:2px;font-weight:500;color:#e2e8f0}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.link{color:#818cf8;text-decoration:none;font-size:12px}.link:hover{text-decoration:underline;color:#a5b4fc}
-.loading{text-align:center;padding:40px;color:#888}
+.sec-head{padding:8px 12px;background:#6d28d9;color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
+.sec-head:hover{background:#5b21b6}
+.sec-head .arrow{font-size:8px;transition:transform .2s}.sec-head .arrow.collapsed{transform:rotate(-90deg)}
+.sec-items{overflow:hidden;transition:max-height .3s ease}.sec-items.collapsed{max-height:0!important}
+
+.item{padding:8px 12px;border-bottom:1px solid #f1f5f9;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#374151;background:#fff;transition:background .15s}
+.item:hover{background:#f5f3ff}
+.item.active{background:#ede9fe;border-left:3px solid #6d28d9}
+.item-name{font-weight:500;font-size:11.5px;color:#1e293b}
+.item-cost{font-weight:700;color:#6d28d9;font-size:10px}
+
+/* === BADGES === */
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:600}
+.b-s{background:#dcfce7;color:#166534}.b-m{background:#fef3c7;color:#92400e}.b-r{background:#fee2e2;color:#991b1b}
+.mt{background:#dcfce7;color:#166534;font-size:9px;padding:1px 6px;border-radius:3px;margin-left:4px;font-weight:600}
+.pin-btn{cursor:pointer;font-size:18px;opacity:.35;margin-left:8px;vertical-align:middle}.pin-btn:hover{opacity:.8}.pin-btn.pinned{opacity:1}
+
+/* === RIGHT PANEL CARDS === */
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card h2{color:#4f46e5;font-size:18px;font-weight:700;margin-bottom:10px;border-bottom:2px solid #ede9fe;padding-bottom:8px;letter-spacing:-.3px}
+.card h3{color:#6d28d9;font-size:14px;font-weight:700;margin:14px 0 8px;letter-spacing:-.2px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0}
+.field{flex:1;min-width:130px;background:#f8fafc;border:1px solid #f1f5f9;border-radius:8px;padding:10px 12px}
+.field label{font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.6px;font-weight:600;display:block;margin-bottom:3px}
+.field p{font-size:13px;font-weight:600;color:#1e293b}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.link{color:#6d28d9;text-decoration:none;font-weight:500}.link:hover{text-decoration:underline;color:#4f46e5}
+.loading{text-align:center;padding:40px;color:#94a3b8}
+
 @media(max-width:768px){.wrap{flex-direction:column}.left{width:100%;height:40vh;min-width:auto}.right{height:60vh}}
 </style></head><body>
 
+<!-- FAKE 404 GATE -->
 <div class="fake404" id="wall">
 <svg height="54" viewBox="0 0 24 24" width="54"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" fill="#24292f"/></svg>
 <h1>404</h1>
@@ -66,23 +97,25 @@ body{font-family:'Inter',system-ui,sans-serif;background:#f5f7fa;color:#333;font
 <div id="passBox"><div><input type="password" id="passInput" placeholder="do you magic" onkeydown="if(event.key==='Enter')tryPass()"><button onclick="tryPass()">→</button></div><div id="passErr">Invalid code</div></div>
 </div>
 
+<!-- APP -->
 <div class="app" id="app">
 <div class="bar">
-<h1>College Planner 2027</h1>
-<div><a href="https://docs.google.com/spreadsheets/d/1jXBB6CA8eVNcbR2mwu2xPWCdlo_lNjWfJNyGVO3io2c/edit" target="_blank">📊 Sheet</a>
-<a href="#" onclick="loadData();return false">🔄</a>
-<a href="#" onclick="lockOut();return false">🔒</a></div>
+<h1>🎓 College Planner 2027</h1>
+<div class="bar-links">
+<a href="https://docs.google.com/spreadsheets/d/1jXBB6CA8eVNcbR2mwu2xPWCdlo_lNjWfJNyGVO3io2c/edit" target="_blank">📊 Sheet</a>
+<a href="#" onclick="loadData();return false">🔄 Refresh</a>
+<a href="#" onclick="lockOut();return false">🔒 Lock</a>
+</div>
 </div>
 <div class="ticker" id="ticker"></div>
 <div class="wrap">
 <div class="left">
 <div class="cbox">
-<div style="font-weight:bold;font-size:10px;color:#a5b4fc;margin-bottom:2px">📋 Paste counselor list:</div>
+<div class="cbox-label">📋 Paste counselor list to compare</div>
 <textarea id="cIn" placeholder="Purdue&#10;Penn State&#10;Georgia Tech..."></textarea>
-<button onclick="compare()">Compare</button>
-<span id="cSt" style="font-size:12px;margin-left:6px;color:#34d399;font-weight:bold"></span>
+<div class="cbox-row"><button onclick="compare()">Compare</button><span id="cSt"></span></div>
 </div>
-<div class="search"><input type="text" id="sb" placeholder="🔍 Search..." oninput="filter()"></div>
+<div class="search"><input type="text" id="sb" placeholder="🔍 Search schools..." oninput="filter()"></div>
 <div class="sections" id="list"><div class="loading">Loading...</div></div>
 </div>
 <div class="right" id="rp"><div class="card"><h2>Loading...</h2></div></div>
@@ -119,30 +152,25 @@ if(!dl||dl==='—'||dl==='Rolling')return null;
 const months={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
 const m=dl.toLowerCase().match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*\s+(\d+)/);
 if(!m)return null;
-const yr=dl.includes('2027')?2027:2026;
-return new Date(yr,months[m[1]],parseInt(m[2]));
+return new Date(dl.includes('2027')?2027:2026,months[m[1]],parseInt(m[2]));
 }
 
 function buildTicker(){
 const now=new Date();
-let deadlines=DB.map((s,i)=>({...s,i,date:parseDeadline(s.ad)}))
-.filter(s=>s.date&&s.date>now)
-.sort((a,b)=>a.date-b.date)
-.slice(0,8);
+let deadlines=DB.map((s,i)=>({...s,i,date:parseDeadline(s.ad)})).filter(s=>s.date&&s.date>now).sort((a,b)=>a.date-b.date).slice(0,8);
 let h='';
 if(deadlines.length){
-h+='<span class="ticker-label">⏰ Deadlines:</span>';
+h+='<span class="ticker-label">⏰ Deadlines</span>';
 deadlines.forEach(s=>{
 const days=Math.ceil((s.date-now)/(1000*60*60*24));
 const cls=days<=30?'chip-urgent':days<=90?'chip-deadline':'chip';
 h+=`<span class="${cls}" onclick="show(${s.i})">${s.n.split(' ')[0]} ${s.ad} (${days}d)</span>`;
-});
-}
+});}
 if(pins.size){
-h+='<span class="ticker-label" style="margin-left:8px">📌 Pinned:</span>';
+h+='<span class="ticker-label" style="margin-left:10px">📌 Pinned</span>';
 DB.forEach((s,i)=>{if(pins.has(s.n))h+=`<span class="chip chip-pin" onclick="show(${i})">${s.n.split(' ').slice(0,2).join(' ')}<span class="x" onclick="event.stopPropagation();togglePin('${s.n.replace(/'/g,"\\'")}')">✕</span></span>`;});
 }
-if(!h)h='<span class="ticker-label">📌 Click the pin icon on any school to add it here for quick access</span>';
+if(!h)h='<span class="ticker-label">📌 Pin schools to see them here for quick access</span>';
 document.getElementById('ticker').innerHTML=h;
 }
 
@@ -158,22 +186,21 @@ css:r[10],me:r[11],ao:r[12],ad:r[13],dt:r[14],dr:r[15],af:r[16],
 applied:r[17]||'—',essay:r[18]||'—',supp:r[19]||'—',trans:r[20]||'—',recs:r[21]||'—',decision:r[22]||'—',
 comments:r[23]||'',url:r[24]||'',g:r[25]||''});}
 buildList();buildTicker();showWelcome();
-}).catch(e=>{document.getElementById('list').innerHTML='<div class="loading" style="color:red">Failed to load. Publish sheet as CSV first.</div>';});
+}).catch(e=>{document.getElementById('list').innerHTML='<div class="loading" style="color:#ef4444">Failed to load. Publish sheet as CSV first.</div>';});
 }
 
-const AL={"rit":"RIT","drexel":"Drexel","george mason":"George Mason","gmu":"George Mason","south florida":"South Florida","usf":"South Florida","northeastern":"Northeastern","penn state":"Penn State","texas a&m":"Texas A&M","tamu":"Texas A&M","cal poly pomona":"Cal Poly Pomona","cal poly slo":"Cal Poly SLO","cal poly":"Cal Poly SLO","cal state fullerton":"Cal State Fullerton","sjsu":"San Jose State","cal state long":"Cal State Long","uc santa cruz":"UC Santa Cruz","uc riverside":"UC Riverside","ut dallas":"UT Dallas","utd":"UT Dallas","oregon tech":"Oregon Tech","university of georgia":"University of Georgia","uga":"University of Georgia","georgia southern":"Georgia Southern","georgia tech":"Georgia Tech","gatech":"Georgia Tech","toronto":"Toronto","washington":"Washington","purdue":"Purdue","texas tech":"Texas Tech","santa clara":"Santa Clara","utsa":"UT San Antonio","kennesaw":"Kennesaw","ut austin":"UT Austin","ucf":"Central Florida","fsu":"Florida State","fiu":"Florida Intl","nc state":"NC State","virginia tech":"Virginia Tech","asu":"Arizona State","birmingham":"Birmingham","warwick":"Warwick","kings college":"King's College","king's":"King's College"};
+const AL={"rit":"RIT","drexel":"Drexel","george mason":"George Mason","gmu":"George Mason","south florida":"South Florida","usf":"South Florida","northeastern":"Northeastern","penn state":"Penn State","texas a&m":"Texas A&M","tamu":"Texas A&M","cal poly pomona":"Cal Poly Pomona","cal poly slo":"Cal Poly SLO","cal poly":"Cal Poly SLO","cal state fullerton":"Cal State Fullerton","sjsu":"San Jose State","cal state long":"Cal State Long","uc santa cruz":"UC Santa Cruz","uc riverside":"UC Riverside","ut dallas":"UT Dallas","utd":"UT Dallas","oregon tech":"Oregon Tech","university of georgia":"University of Georgia","uga":"University of Georgia","georgia southern":"Georgia Southern","georgia tech":"Georgia Tech","gatech":"Georgia Tech","toronto":"Toronto","washington":"Washington","purdue":"Purdue","texas tech":"Texas Tech","santa clara":"Santa Clara","utsa":"UT San Antonio","kennesaw":"Kennesaw","ut austin":"UT Austin","ucf":"Central Florida","fsu":"Florida State","fiu":"Florida Intl","nc state":"NC State","virginia tech":"Virginia Tech","asu":"Arizona State","birmingham":"Birmingham","warwick":"Warwick","kings college":"King's College","king's":"King's College","uc davis":"UC Davis","uc irvine":"UC Irvine","san bernardino":"San Bernardino","csusb":"San Bernardino"};
 function ms(input){const l=input.toLowerCase().trim();if(!l)return[];for(const[k,v]of Object.entries(AL)){if(l.includes(k))return DB.filter(s=>s.n.toLowerCase().includes(v.toLowerCase()));}return DB.filter(s=>s.n.toLowerCase().includes(l));}
 function bc(c){return c==="Safety"?"b-s":c==="Match"?"b-m":"b-r"}
 
 function showWelcome(){
 document.getElementById('rp').innerHTML=`<div class="card"><h2>👆 Click any school on the left</h2>
 <div class="grid2">
-<div class="card" style="margin:0"><h3>Profile</h3><p>Lynbrook HS | <br>SJ, CA → Alpharetta, GA</p></div>
-<div class="card" style="margin:0"><h3>Aid</h3><p>❌ FAFSA | ✅ CSS (5 schools)<br>✅ Auto-merit: ASU, UA, UTD<br>✅ Loans: MPOWER (no cosigner)</p></div>
+<div class="card" style="margin:0"><h3>Student Profile</h3><p style="color:#475569;line-height:1.6">Lynbrook HS, San Jose West 95129<br>Cybersecurity & Computer Science<br>SJ, CA → Alpharetta, GA</p></div>
+<div class="card" style="margin:0"><h3>Financial Aid Available</h3><p style="color:#475569;line-height:1.6">❌ FAFSA (not eligible on F-1)<br>✅ CSS Profile (5 schools)<br>✅ Auto-merit: ASU, UA, UTD<br>✅ Loans: MPOWER (no cosigner)</p></div>
 </div>
-<p style="margin-top:8px;font-size:11px;color:#666">📊 Data from <a href="https://docs.google.com/spreadsheets/d/1jXBB6CA8eVNcbR2mwu2xPWCdlo_lNjWfJNyGVO3io2c/edit" target="_blank" class="link">Google Sheet</a>. <b>${DB.length} schools loaded.</b><br>
-📌 Pin your favorite schools — they appear in the top bar for quick jump.<br>
-⏰ Approaching deadlines auto-show in the top bar (yellow = urgent).</p></div>`;
+<p style="margin-top:12px;font-size:11px;color:#94a3b8;line-height:1.6">📊 Data from <a href="https://docs.google.com/spreadsheets/d/1jXBB6CA8eVNcbR2mwu2xPWCdlo_lNjWfJNyGVO3io2c/edit" target="_blank" class="link">Google Sheet</a> — edit there, 🔄 refresh here. <b style="color:#6d28d9">${DB.length} schools loaded.</b><br>
+📌 Pin favorites for quick access in the top bar &nbsp;|&nbsp; ⏰ Upcoming deadlines auto-appear above</p></div>`;
 }
 
 function show(i){
@@ -187,28 +214,30 @@ document.getElementById('rp').innerHTML=`
 <div class="card"><h2><a href="${s.url}" target="_blank" class="link">${s.n}</a> ${ic?'<span class="mt">✓ Counselor</span>':''} <span class="badge ${bc(s.cat)}">${s.cat} ${s.ch}</span>
 <span class="pin-btn ${isPinned?'pinned':''}" onclick="togglePin('${safeN}')" title="${pinLabel}">${pinIcon}</span></h2>
 <div class="grid3">
-<div class="field"><label>Cost/yr (F-1)</label><p><b>${s.co}</b></p></div>
-${s.h4?`<div class="field"><label>H-4 Waiver</label><p style="color:#2E7D32;font-weight:bold">${s.h4}/yr</p></div>`:''}
+<div class="field"><label>Cost/yr (F-1)</label><p style="color:#6d28d9;font-size:15px">${s.co}</p></div>
+${s.h4?`<div class="field"><label>H-4 Waiver</label><p style="color:#16a34a;font-size:15px">${s.h4}/yr</p></div>`:''}
 <div class="field"><label>App Fee</label><p>${s.af}</p></div>
 </div>
 <div class="row"><div class="field"><label>Cyber Program</label><p>${s.cy}</p></div><div class="field"><label>NSA/CAE</label><p>${s.nsa}</p></div></div>
 <div class="row"><div class="field"><label>Weather</label><p>${s.w}</p></div><div class="field"><label>Crime</label><p>${s.cr}</p></div>
-<div class="field"><label>CSS?</label><p>${s.css.includes('Yes')?'✅ '+s.css:'❌ No'}</p></div><div class="field"><label>Merit</label><p>${s.me}</p></div></div></div>
-<div class="card"><h3>📅 Timeline</h3>
-<div class="grid3"><div class="field"><label>Opens</label><p>${s.ao||'—'}</p></div><div class="field"><label>Deadline</label><p><b>${s.ad}</b></p></div>
-<div class="field"><label>Type</label><p>${s.dt}</p></div><div class="field"><label>Decision</label><p>${s.dr}</p></div>
-<div class="field"><label>Website</label><p><a href="${s.url}" target="_blank" class="link">Visit →</a></p></div></div></div>
-<div class="card"><h3>📝 Tracking</h3>
+<div class="field"><label>CSS Profile?</label><p>${s.css.includes('Yes')?'✅ '+s.css:'❌ No'}</p></div><div class="field"><label>Merit Aid</label><p>${s.me}</p></div></div></div>
+
+<div class="card"><h3>📅 Application Timeline</h3>
+<div class="grid3"><div class="field"><label>App Opens</label><p>${s.ao||'—'}</p></div><div class="field"><label>Deadline</label><p style="color:#dc2626;font-weight:700">${s.ad}</p></div>
+<div class="field"><label>Decision Type</label><p>${s.dt}</p></div><div class="field"><label>Decision Release</label><p>${s.dr}</p></div>
+<div class="field"><label>College Website</label><p><a href="${s.url}" target="_blank" class="link">Visit →</a></p></div></div></div>
+
+<div class="card"><h3>📝 Application Tracking</h3>
 <div class="grid3">
-<div class="field"><label>Applied</label><p><b>${s.applied}</b></p></div>
+<div class="field"><label>Applied?</label><p style="font-size:14px">${s.applied}</p></div>
 <div class="field"><label>Common App Essay</label><p>${s.essay}</p></div>
-<div class="field"><label>Supplemental</label><p>${s.supp}</p></div>
-<div class="field"><label>Transcripts</label><p>${s.trans}</p></div>
-<div class="field"><label>Recs</label><p>${s.recs}</p></div>
-<div class="field"><label>Decision</label><p>${s.decision}</p></div>
+<div class="field"><label>Supplemental Essay</label><p>${s.supp}</p></div>
+<div class="field"><label>Transcripts Sent</label><p>${s.trans}</p></div>
+<div class="field"><label>Recs Sent</label><p>${s.recs}</p></div>
+<div class="field"><label>Decision</label><p style="font-size:14px">${s.decision}</p></div>
 </div>
-<p style="font-size:10px;color:#888;margin-top:6px">✏️ Edit in <a href="https://docs.google.com/spreadsheets/d/1jXBB6CA8eVNcbR2mwu2xPWCdlo_lNjWfJNyGVO3io2c/edit" target="_blank" class="link">Google Sheet</a> → 🔄 Refresh</p></div>
-${s.comments?`<div class="card"><h3>💬 Comments</h3><p>${s.comments}</p></div>`:''}`;
+<p style="font-size:10px;color:#94a3b8;margin-top:10px">✏️ Edit tracking in <a href="https://docs.google.com/spreadsheets/d/1jXBB6CA8eVNcbR2mwu2xPWCdlo_lNjWfJNyGVO3io2c/edit" target="_blank" class="link">Google Sheet</a> → click 🔄 Refresh</p></div>
+${s.comments?`<div class="card"><h3>💬 Comments</h3><p style="color:#475569">${s.comments}</p></div>`:''}`;
 }
 
 let collapsed={};
@@ -222,14 +251,12 @@ h+=`<div class="sec-head" onclick="toggleSec('${g.id}')">${g.l} (${sc.length})<s
 h+=`<div class="sec-items ${isC?'collapsed':''}" style="max-height:${isC?'0':'9999'}px">`;
 sc.forEach(s=>{const ic=cSet.has(s.n);const ip=pins.has(s.n);
 h+=`<div class="item${activeI===s.i?' active':''}" data-i="${s.i}" data-nm="${s.n.toLowerCase()}" onclick="show(${s.i})">
-<div style="flex:1"><b style="font-size:11px">${ip?'📌 ':''}${s.n}</b>${ic?'<span class="mt">✓</span>':''}</div>
-<div style="text-align:right"><div style="font-weight:bold;color:#818cf8;font-size:10px">${s.co}</div><span class="badge ${bc(s.cat)}">${s.cat}</span></div></div>`;
-});
-h+=`</div>`;
-});
+<div style="flex:1"><span class="item-name">${ip?'📌 ':''}${s.n}</span>${ic?'<span class="mt">✓</span>':''}</div>
+<div style="text-align:right"><div class="item-cost">${s.co}</div><span class="badge ${bc(s.cat)}">${s.cat}</span></div></div>`;
+});h+=`</div>`;});
 document.getElementById('list').innerHTML=h||'<div class="loading">No data.</div>';
 }
 
 function filter(){const q=document.getElementById('sb').value.toLowerCase();document.querySelectorAll('.item').forEach(e=>{e.style.display=e.dataset.nm.includes(q)?'':'none';});}
-function compare(){const input=document.getElementById('cIn').value;const lines=input.split('\n').map(l=>l.replace(/^\d+\.?\s*/,'').replace(/\{.*?\}/g,'').trim()).filter(l=>l&&!/^tier\s*\d/i.test(l));cSet=new Set();lines.forEach(l=>{ms(l).forEach(s=>cSet.add(s.n));});document.getElementById('cSt').innerHTML=`<span style="background:#4f46e5;color:#fff;padding:2px 8px;border-radius:3px">✓ ${cSet.size} matched</span>`;buildList();}
+function compare(){const input=document.getElementById('cIn').value;const lines=input.split('\n').map(l=>l.replace(/^\d+\.?\s*/,'').replace(/\{.*?\}/g,'').trim()).filter(l=>l&&!/^tier\s*\d/i.test(l));cSet=new Set();lines.forEach(l=>{ms(l).forEach(s=>cSet.add(s.n));});document.getElementById('cSt').innerHTML=`<span style="background:#6d28d9;color:#fff;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:600">✓ ${cSet.size} matched</span>`;buildList();}
 </script></body></html>
