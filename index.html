@@ -55,6 +55,13 @@ body{font-family:'Inter',system-ui,sans-serif;background:#f8fafc;color:#1e293b;f
 .search input::placeholder{color:#9ca3af}
 
 .sections{overflow-y:auto;flex:1}
+.month-bar{padding:6px 10px;border-bottom:1px solid #d5e5d5;background:#e8f0e7;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.month-label{font-size:9px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.month-pills{display:flex;gap:3px;flex-wrap:wrap}
+.mpill{padding:3px 8px;border-radius:4px;font-size:9px;font-weight:600;cursor:pointer;border:1px solid #c5d5c5;background:#fff;color:#374151;transition:all .15s}
+.mpill:hover{background:#dbeede;border-color:#6d28d9}
+.mpill.active{background:#6d28d9;color:#fff;border-color:#6d28d9}
+.month-count{font-size:9px;color:#6d28d9;font-weight:700;margin-left:4px}
 .sec-head{padding:8px 12px;background:#6d28d9;color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
 .sec-head:hover{background:#5b21b6}
 .sec-head .arrow{font-size:8px;transition:transform .2s}.sec-head .arrow.collapsed{transform:rotate(-90deg)}
@@ -116,6 +123,10 @@ body{font-family:'Inter',system-ui,sans-serif;background:#f8fafc;color:#1e293b;f
 <div class="cbox-row"><button onclick="compare()">Compare</button><span id="cSt"></span></div>
 </div>
 <div class="search"><input type="text" id="sb" placeholder="🔍 Search schools..." oninput="filter()"></div>
+<div class="month-bar">
+<span class="month-label">📅 Accepting in:</span>
+<div class="month-pills" id="monthPills"></div>
+</div>
 <div class="sections" id="list"><div class="loading">Loading...</div></div>
 </div>
 <div class="right" id="rp"><div class="card"><h2>Loading...</h2></div></div>
@@ -185,7 +196,7 @@ DB.push({n:r[0],s:r[1],cat:r[2],ch:r[3],cy:r[4],nsa:r[5],w:r[6],cr:r[7],co:r[8],
 css:r[10],me:r[11],ao:r[12],ad:r[13],dt:r[14],dr:r[15],af:r[16],
 applied:r[17]||'—',essay:r[18]||'—',supp:r[19]||'—',trans:r[20]||'—',recs:r[21]||'—',decision:r[22]||'—',
 comments:r[23]||'',url:r[24]||'',g:r[25]||''});}
-buildList();buildTicker();showWelcome();
+buildList();buildTicker();buildMonthPills();showWelcome();
 }).catch(e=>{document.getElementById('list').innerHTML='<div class="loading" style="color:#ef4444">Failed to load. Publish sheet as CSV first.</div>';});
 }
 
@@ -240,12 +251,59 @@ ${s.h4?`<div class="field"><label>H-4 Waiver</label><p style="color:#16a34a;font
 ${s.comments?`<div class="card"><h3>💬 Comments</h3><p style="color:#475569">${s.comments}</p></div>`:''}`;
 }
 
-let collapsed={};
+let collapsed={},activeMonth=null;
+
+const MONTHS=['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul'];
+const MONTH_MAP={aug:7,sep:8,oct:9,nov:10,dec:11,jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6};
+
+function parseMonthDate(str){
+if(!str)return null;
+const m=str.toLowerCase().match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*\s*(\d*)/);
+if(!m)return null;
+const mon=MONTH_MAP[m[1]];
+const day=m[2]?parseInt(m[2]):1;
+const yr=mon>=7?2026:2027;
+return new Date(yr,mon,day);
+}
+
+function isAccepting(school,monthIdx){
+const monthNum=MONTH_MAP[MONTHS[monthIdx].toLowerCase()];
+const yr=monthNum>=7?2026:2027;
+const checkDate=new Date(yr,monthNum,15);
+const opens=parseMonthDate(school.ao);
+const deadline=parseMonthDate(school.ad);
+if(!opens&&!deadline){
+if(school.dt&&school.dt.toLowerCase().includes('rolling'))return true;
+return false;
+}
+if(opens&&deadline)return checkDate>=opens&&checkDate<=deadline;
+if(deadline)return checkDate<=deadline;
+if(opens)return checkDate>=opens;
+return false;
+}
+
+function buildMonthPills(){
+let h='';
+MONTHS.forEach((m,i)=>{
+const count=DB.filter(s=>isAccepting(s,i)).length;
+h+=`<span class="mpill${activeMonth===i?' active':''}" onclick="toggleMonth(${i})">${m}<span class="month-count">${count}</span></span>`;
+});
+document.getElementById('monthPills').innerHTML=h;
+}
+
+function toggleMonth(idx){
+activeMonth=activeMonth===idx?null:idx;
+buildMonthPills();buildList();
+}
+
 function toggleSec(id){collapsed[id]=!collapsed[id];buildList();}
 function buildList(){
 const groups=[{l:'🏠 Georgia',id:'ga',f:s=>s.g==='Georgia'},{l:'🇺🇸 California',id:'ca',f:s=>s.g==='California'},{l:'🇺🇸 Texas',id:'tx',f:s=>s.g==='Texas'},{l:'🇺🇸 Florida',id:'fl',f:s=>s.g==='Florida'},{l:'🇺🇸 Other US',id:'ous',f:s=>s.g==='Other US'},{l:'🇺🇸 Private (CSS)',id:'css',f:s=>s.g==='Private CSS'},{l:'🌍 International',id:'intl',f:s=>s.g==='International'}];
 let h='';
-groups.forEach(g=>{const sc=DB.map((s,i)=>({...s,i})).filter(g.f);if(!sc.length)return;
+const monthFilter=activeMonth!==null;
+groups.forEach(g=>{let sc=DB.map((s,i)=>({...s,i})).filter(g.f);
+if(monthFilter)sc=sc.filter(s=>isAccepting(s,activeMonth));
+if(!sc.length)return;
 const isC=collapsed[g.id];
 h+=`<div class="sec-head" onclick="toggleSec('${g.id}')">${g.l} (${sc.length})<span class="arrow ${isC?'collapsed':''}">▼</span></div>`;
 h+=`<div class="sec-items ${isC?'collapsed':''}" style="max-height:${isC?'0':'9999'}px">`;
@@ -254,7 +312,7 @@ h+=`<div class="item${activeI===s.i?' active':''}" data-i="${s.i}" data-nm="${s.
 <div style="flex:1"><span class="item-name">${ip?'📌 ':''}${s.n}</span>${ic?'<span class="mt">✓</span>':''}</div>
 <div style="text-align:right"><div class="item-cost">${s.co}</div><span class="badge ${bc(s.cat)}">${s.cat}</span></div></div>`;
 });h+=`</div>`;});
-document.getElementById('list').innerHTML=h||'<div class="loading">No data.</div>';
+document.getElementById('list').innerHTML=h||'<div class="loading">'+(monthFilter?'No schools accepting in '+MONTHS[activeMonth]:'No data.')+'</div>';
 }
 
 function filter(){const q=document.getElementById('sb').value.toLowerCase();document.querySelectorAll('.item').forEach(e=>{e.style.display=e.dataset.nm.includes(q)?'':'none';});}
