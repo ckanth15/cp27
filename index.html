@@ -55,7 +55,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#f8fafc;color:#1e293b;f
 .search input::placeholder{color:#9ca3af}
 
 .sections{overflow-y:auto;flex:1}
-.cat-bar{padding:6px 10px;border-bottom:1px solid #d5e5d5;background:#f0f7ef;display:flex;align-items:center;gap:6px}
+.cat-bar{padding:6px 10px;border-bottom:1px solid #d5e5d5;background:#f0f7ef;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .cat-label{font-size:9px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.5px}
 .cat-pill{padding:4px 12px;border-radius:5px;font-size:10px;font-weight:600;cursor:pointer;border:1.5px solid #d1d5db;background:#fff;color:#374151;transition:all .15s}
 .cat-pill:hover{transform:scale(1.05)}
@@ -64,7 +64,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#f8fafc;color:#1e293b;f
 .cat-pill.b-m{border-color:#fde68a;color:#92400e}.cat-pill.b-m.active{background:#fef3c7;border-color:#92400e}
 .cat-pill.b-r{border-color:#fca5a5;color:#991b1b}.cat-pill.b-r.active{background:#fee2e2;border-color:#991b1b}
 .cat-pill#catAll{border-color:#c4b5fd;color:#6d28d9}.cat-pill#catAll.active{background:#ede9fe;border-color:#6d28d9}
-.cat-count{font-size:10px;font-weight:700;color:#6d28d9;margin-left:auto}
+.cat-count{font-size:9px;font-weight:700;color:#6d28d9;background:#ede9fe;padding:2px 8px;border-radius:4px}
 .month-bar{padding:6px 10px;border-bottom:1px solid #d5e5d5;background:#e8f0e7;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .month-label{font-size:9px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
 .month-pills{display:flex;gap:3px;flex-wrap:wrap}
@@ -135,7 +135,6 @@ body{font-family:'Inter',system-ui,sans-serif;background:#f8fafc;color:#1e293b;f
 </div>
 <div class="search"><input type="text" id="sb" placeholder="🔍 Search schools..." oninput="filter()"></div>
 <div class="cat-bar">
-<span class="cat-label">Filter:</span>
 <span class="cat-pill" onclick="toggleCat('all')" id="catAll">All</span>
 <span class="cat-pill b-s" onclick="toggleCat('Safety')" id="catSafety">Safety</span>
 <span class="cat-pill b-m" onclick="toggleCat('Match')" id="catMatch">Match</span>
