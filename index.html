@@ -131,7 +131,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#f8fafc;color:#1e293b;f
 <div class="cbox">
 <div class="cbox-label">📋 Paste counselor list to compare</div>
 <textarea id="cIn" placeholder="Purdue&#10;Penn State&#10;Georgia Tech..."></textarea>
-<div class="cbox-row"><button onclick="compare()">Compare</button><span id="cSt"></span></div>
+<div class="cbox-row"><button onclick="compare()">Compare</button><span id="cSt"></span><button onclick="clearCompare()" style="padding:4px 10px;background:#e2e8f0;color:#64748b;border:none;border-radius:4px;cursor:pointer;font-size:10px;font-weight:500;margin-left:4px">✕ Clear</button></div>
 </div>
 <div class="search"><input type="text" id="sb" placeholder="🔍 Search schools..." oninput="filter()"></div>
 <div class="cat-bar">
@@ -484,4 +484,5 @@ document.getElementById('list').innerHTML=h||'<div class="loading">'+(monthFilte
 
 function filter(){const q=document.getElementById('sb').value.toLowerCase();document.querySelectorAll('.item').forEach(e=>{e.style.display=e.dataset.nm.includes(q)?'':'none';});}
 function compare(){const input=document.getElementById('cIn').value;const lines=input.split('\n').map(l=>l.replace(/^\d+\.?\s*/,'').replace(/\{.*?\}/g,'').trim()).filter(l=>l&&!/^tier\s*\d/i.test(l));cSet=new Set();lines.forEach(l=>{ms(l).forEach(s=>cSet.add(s.n));});document.getElementById('cSt').innerHTML=`<span style="background:#6d28d9;color:#fff;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:600">✓ ${cSet.size} matched</span>`;buildList();}
+function clearCompare(){document.getElementById('cIn').value='';cSet=new Set();document.getElementById('cSt').innerHTML='';buildList();}
 </script></body></html>
