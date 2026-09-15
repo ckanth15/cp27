@@ -55,6 +55,16 @@ body{font-family:'Inter',system-ui,sans-serif;background:#f8fafc;color:#1e293b;f
 .search input::placeholder{color:#9ca3af}
 
 .sections{overflow-y:auto;flex:1}
+.cat-bar{padding:6px 10px;border-bottom:1px solid #d5e5d5;background:#f0f7ef;display:flex;align-items:center;gap:6px}
+.cat-label{font-size:9px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.5px}
+.cat-pill{padding:4px 12px;border-radius:5px;font-size:10px;font-weight:600;cursor:pointer;border:1.5px solid #d1d5db;background:#fff;color:#374151;transition:all .15s}
+.cat-pill:hover{transform:scale(1.05)}
+.cat-pill.active{border-width:2px;transform:scale(1.08);box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.cat-pill.b-s{border-color:#86efac;color:#166534}.cat-pill.b-s.active{background:#dcfce7;border-color:#166534}
+.cat-pill.b-m{border-color:#fde68a;color:#92400e}.cat-pill.b-m.active{background:#fef3c7;border-color:#92400e}
+.cat-pill.b-r{border-color:#fca5a5;color:#991b1b}.cat-pill.b-r.active{background:#fee2e2;border-color:#991b1b}
+.cat-pill#catAll{border-color:#c4b5fd;color:#6d28d9}.cat-pill#catAll.active{background:#ede9fe;border-color:#6d28d9}
+.cat-count{font-size:10px;font-weight:700;color:#6d28d9;margin-left:auto}
 .month-bar{padding:6px 10px;border-bottom:1px solid #d5e5d5;background:#e8f0e7;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .month-label{font-size:9px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
 .month-pills{display:flex;gap:3px;flex-wrap:wrap}
@@ -109,6 +119,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#f8fafc;color:#1e293b;f
 <div class="bar">
 <h1>🎓 College Planner 2027</h1>
 <div class="bar-links">
+<a href="#" onclick="openAddModal();return false">➕ Add</a>
 <a href="https://docs.google.com/spreadsheets/d/1jXBB6CA8eVNcbR2mwu2xPWCdlo_lNjWfJNyGVO3io2c/edit" target="_blank">📊 Sheet</a>
 <a href="#" onclick="loadData();return false">🔄 Refresh</a>
 <a href="#" onclick="lockOut();return false">🔒 Lock</a>
@@ -123,6 +134,14 @@ body{font-family:'Inter',system-ui,sans-serif;background:#f8fafc;color:#1e293b;f
 <div class="cbox-row"><button onclick="compare()">Compare</button><span id="cSt"></span></div>
 </div>
 <div class="search"><input type="text" id="sb" placeholder="🔍 Search schools..." oninput="filter()"></div>
+<div class="cat-bar">
+<span class="cat-label">Filter:</span>
+<span class="cat-pill" onclick="toggleCat('all')" id="catAll">All</span>
+<span class="cat-pill b-s" onclick="toggleCat('Safety')" id="catSafety">Safety</span>
+<span class="cat-pill b-m" onclick="toggleCat('Match')" id="catMatch">Match</span>
+<span class="cat-pill b-r" onclick="toggleCat('Reach')" id="catReach">Reach</span>
+<span class="cat-count" id="catCount"></span>
+</div>
 <div class="month-bar">
 <span class="month-label">📅 Accepting in:</span>
 <div class="month-pills" id="monthPills"></div>
@@ -133,7 +152,141 @@ body{font-family:'Inter',system-ui,sans-serif;background:#f8fafc;color:#1e293b;f
 </div>
 </div>
 
+<!-- ADD SCHOOL MODAL -->
+<div id="addModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);z-index:1000;display:none;justify-content:center;align-items:center">
+<div style="background:#fff;border-radius:12px;padding:24px;width:500px;max-width:90vw;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+<h2 style="color:#4f46e5;font-size:18px;font-weight:700">➕ Add School</h2>
+<span onclick="closeAddModal()" style="cursor:pointer;font-size:20px;color:#94a3b8">✕</span>
+</div>
+<div style="margin-bottom:12px">
+<label style="font-size:10px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.5px">School Name</label>
+<input type="text" id="addName" placeholder="Type school name..." oninput="lookupSchool()" style="width:100%;padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;margin-top:4px;font-family:'Inter',sans-serif">
+<div id="addSuggestions" style="margin-top:4px"></div>
+</div>
+<div id="addPreview" style="display:none">
+<div style="background:#f0f7ef;border:1px solid #d5e5d5;border-radius:8px;padding:12px;margin-bottom:12px">
+<div id="addDetails" style="font-size:12px;line-height:1.8;color:#374151"></div>
+</div>
+<div style="display:flex;gap:8px">
+<button onclick="submitSchool()" id="addBtn" style="flex:1;padding:10px;background:#6d28d9;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Add to Google Sheet</button>
+</div>
+<div id="addStatus" style="margin-top:8px;font-size:12px;text-align:center"></div>
+</div>
+<div id="addSetup" style="display:none;background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:12px;margin-top:12px;font-size:11px;color:#92400e">
+<b>⚠️ First-time setup needed:</b> Paste the Apps Script into your Google Sheet. See the README file for instructions, then enter your Web App URL below:<br>
+<input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/s/.../exec" oninput="saveScriptUrl()" style="width:100%;padding:6px;border:1px solid #d1d5db;border-radius:4px;font-size:11px;margin-top:6px">
+</div>
+</div>
+</div>
+
 <script>
+
+// === APPS SCRIPT URL (saved in localStorage) ===
+const SCRIPT_KEY='_cp27script';
+function getScriptUrl(){try{return localStorage.getItem(SCRIPT_KEY)||'';}catch(e){return '';}}
+function saveScriptUrl(){try{localStorage.setItem(SCRIPT_KEY,document.getElementById('scriptUrl').value);}catch(e){}}
+
+// === SCHOOL DATABASE (built-in details for auto-fill) ===
+const SCHOOL_DB={
+"university of alabama":{"name":"University of Alabama","state":"AL","category":"Safety","chance":"80-90%","cyber":"BS CS + Cybersecurity","nsa":"CAE-CD","weather":"Hot sum, mild win","crime":"Moderate","cost":"$26-30k","css":"No","merit":"Yes","appOpens":"Aug 1","appDeadline":"Feb 1","decisionType":"Rolling","decisionRelease":"4-6 weeks","appFee":"$40","website":"https://www.ua.edu","group":"Other US","comments":""},
+"university of cincinnati":{"name":"University of Cincinnati","state":"OH","category":"Match","chance":"65-75%","cyber":"BS IT + Cybersecurity","nsa":"CAE-CD","weather":"Cold win, warm sum","crime":"Moderate","cost":"$26-30k","css":"No","merit":"Yes","appOpens":"Aug 1","appDeadline":"Mar 1","decisionType":"Rolling","decisionRelease":"4-6 weeks","appFee":"$50","website":"https://www.uc.edu","group":"Other US","comments":"Co-op program"},
+"iowa state university":{"name":"Iowa State University","state":"IA","category":"Safety","chance":"85-95%","cyber":"BS Cybersecurity Engineering","nsa":"CAE-CD","weather":"Cold winters","crime":"Very Low","cost":"$24-27k","css":"No","merit":"Yes","appOpens":"Aug 1","appDeadline":"May 1","decisionType":"Rolling","decisionRelease":"2-4 weeks","appFee":"$40","website":"https://www.iastate.edu","group":"Other US","comments":"Dedicated BS Cyber Engineering"},
+"university of south carolina":{"name":"University of South Carolina","state":"SC","category":"Safety","chance":"80-90%","cyber":"BS CS + Cybersecurity","nsa":"CAE-CD","weather":"Warm, humid","crime":"Moderate","cost":"$25-29k","css":"No","merit":"Yes","appOpens":"Aug 1","appDeadline":"Dec 1","decisionType":"Rolling","decisionRelease":"4-6 weeks","appFee":"$65","website":"https://www.sc.edu","group":"Other US","comments":""},
+"george washington university":{"name":"George Washington University","state":"DC","category":"Match","chance":"50-60%","cyber":"BS CS + Cybersecurity","nsa":"CAE-R","weather":"Mild, 4 seasons","crime":"Moderate","cost":"$42-50k (after aid)","css":"Yes — CSS!","merit":"$15-25k/yr","appOpens":"Aug 1","appDeadline":"Jan 5","decisionType":"EA Nov 1 / Reg Jan 5","decisionRelease":"EA Dec / Reg Apr","appFee":"$80","website":"https://www.gwu.edu","group":"Private CSS","comments":"CSS Profile, DC location, near NSA"},
+"fordham university":{"name":"Fordham University","state":"NY","category":"Match","chance":"55-65%","cyber":"BS CS + Cybersecurity","nsa":"--","weather":"Cold win","crime":"Low","cost":"$40-48k (after aid)","css":"Yes — CSS!","merit":"$10-20k/yr","appOpens":"Aug 1","appDeadline":"Jan 1","decisionType":"EA Nov 1 / Reg Jan 1","decisionRelease":"EA Dec / Reg Apr","appFee":"$70","website":"https://www.fordham.edu","group":"Private CSS","comments":"CSS Profile, NYC"},
+"stevens institute of technology":{"name":"Stevens Institute of Technology","state":"NJ","category":"Match","chance":"55-65%","cyber":"BS Cybersecurity","nsa":"CAE-CD","weather":"Cold win","crime":"Low","cost":"$38-45k (after aid)","css":"Yes — CSS!","merit":"$10-25k/yr","appOpens":"Sep 1","appDeadline":"Jan 15","decisionType":"EA Nov 15 / Reg Jan 15","decisionRelease":"EA Jan / Reg Apr","appFee":"$70","website":"https://www.stevens.edu","group":"Private CSS","comments":"CSS Profile, dedicated BS Cybersecurity"},
+"clemson university":{"name":"Clemson University","state":"SC","category":"Match","chance":"55-65%","cyber":"BS CS + Cybersecurity","nsa":"CAE-CD","weather":"Warm, mild win","crime":"Very Low","cost":"$28-32k","css":"No","merit":"Yes","appOpens":"Aug 1","appDeadline":"May 1","decisionType":"Rolling","decisionRelease":"4-6 weeks","appFee":"$70","website":"https://www.clemson.edu","group":"Other US","comments":"Safe campus"},
+"michigan state university":{"name":"Michigan State University","state":"MI","category":"Match","chance":"65-75%","cyber":"BS CS + Cybersecurity","nsa":"CAE-CD","weather":"Cold winters","crime":"Low","cost":"$28-32k","css":"No","merit":"Yes","appOpens":"Aug 1","appDeadline":"Feb 1","decisionType":"Rolling","decisionRelease":"4-8 weeks","appFee":"$65","website":"https://www.msu.edu","group":"Other US","comments":""},
+"university of denver":{"name":"University of Denver","state":"CO","category":"Match","chance":"60-70%","cyber":"BS CS + Cybersecurity","nsa":"CAE-CD","weather":"Cold win, sunny","crime":"Low","cost":"$38-45k (after aid)","css":"Yes — CSS!","merit":"$10-20k/yr","appOpens":"Aug 1","appDeadline":"Jan 15","decisionType":"EA Nov 1 / Reg Jan 15","decisionRelease":"EA Dec / Reg Mar","appFee":"$65","website":"https://www.du.edu","group":"Private CSS","comments":"CSS Profile"},
+"embry-riddle aeronautical":{"name":"Embry-Riddle Aeronautical University","state":"FL","category":"Match","chance":"65-75%","cyber":"BS Cyber Intelligence & Security","nsa":"CAE-CD","weather":"Warm","crime":"Low","cost":"$30-35k","css":"No","merit":"Yes","appOpens":"Aug 1","appDeadline":"Rolling","decisionType":"Rolling","decisionRelease":"2-4 weeks","appFee":"$50","website":"https://www.erau.edu","group":"Florida","comments":"Dedicated BS Cyber Intelligence"},
+"dakota state university":{"name":"Dakota State University","state":"SD","category":"Safety","chance":"90-95%","cyber":"BS Cyber Operations (NSA designated!)","nsa":"CAE-CO","weather":"Cold winters","crime":"Very Low","cost":"$16-19k","css":"No","merit":"Yes","appOpens":"Aug 1","appDeadline":"Rolling","decisionType":"Rolling","decisionRelease":"2-4 weeks","appFee":"$20","website":"https://www.dsu.edu","group":"Other US","comments":"One of only ~20 schools with CAE-CO. Very affordable!"},
+};
+
+let selectedSchool=null;
+
+function openAddModal(){
+document.getElementById('addModal').style.display='flex';
+document.getElementById('addName').value='';
+document.getElementById('addPreview').style.display='none';
+document.getElementById('addSuggestions').innerHTML='';
+document.getElementById('addStatus').innerHTML='';
+const url=getScriptUrl();
+document.getElementById('addSetup').style.display=url?'none':'block';
+if(url)document.getElementById('scriptUrl').value=url;
+document.getElementById('addName').focus();
+}
+
+function closeAddModal(){document.getElementById('addModal').style.display='none';}
+
+function lookupSchool(){
+const q=document.getElementById('addName').value.toLowerCase().trim();
+if(q.length<2){document.getElementById('addSuggestions').innerHTML='';document.getElementById('addPreview').style.display='none';return;}
+
+// Search built-in database
+const matches=Object.entries(SCHOOL_DB).filter(([k,v])=>k.includes(q)||v.name.toLowerCase().includes(q)).slice(0,5);
+
+// Also check if already in current sheet data
+const inSheet=DB.find(s=>s.n.toLowerCase().includes(q));
+
+let h='';
+if(inSheet){
+h+=`<div style="padding:6px 10px;background:#dcfce7;border-radius:4px;font-size:11px;color:#166534;margin-bottom:4px">✅ <b>${inSheet.n}</b> already in your sheet</div>`;
+}
+matches.forEach(([k,v])=>{
+const exists=DB.some(s=>s.n.toLowerCase()===v.name.toLowerCase());
+h+=`<div onclick="selectSchool('${k}')" style="padding:6px 10px;cursor:pointer;border-radius:4px;font-size:12px;margin-bottom:2px;background:${exists?'#f1f5f9':'#faf5ff'};border:1px solid ${exists?'#e2e8f0':'#e9d5ff'}">${exists?'✅':'➕'} <b>${v.name}</b> <span style="color:#64748b">${v.state} · ${v.category} · ${v.cost}</span></div>`;
+});
+if(!matches.length&&!inSheet){h+=`<div style="padding:6px;font-size:11px;color:#94a3b8">School not in database. You can add it manually in the Google Sheet.</div>`;}
+document.getElementById('addSuggestions').innerHTML=h;
+}
+
+function selectSchool(key){
+const s=SCHOOL_DB[key];
+selectedSchool=s;
+const exists=DB.some(d=>d.n.toLowerCase()===s.name.toLowerCase());
+
+document.getElementById('addSuggestions').innerHTML='';
+document.getElementById('addPreview').style.display='block';
+document.getElementById('addName').value=s.name;
+
+let d=`<b style="font-size:14px;color:#4f46e5">${s.name}</b> <span class="badge ${s.category==='Safety'?'b-s':s.category==='Match'?'b-m':'b-r'}">${s.category} ${s.chance}</span><br>`;
+d+=`<b>State:</b> ${s.state} · <b>Cost:</b> ${s.cost} · <b>NSA:</b> ${s.nsa}<br>`;
+d+=`<b>Program:</b> ${s.cyber}<br>`;
+d+=`<b>Weather:</b> ${s.weather} · <b>Crime:</b> ${s.crime}<br>`;
+d+=`<b>CSS:</b> ${s.css} · <b>Merit:</b> ${s.merit}<br>`;
+d+=`<b>Deadline:</b> ${s.appDeadline} · <b>Fee:</b> ${s.appFee}<br>`;
+if(s.comments)d+=`<b>Notes:</b> ${s.comments}`;
+document.getElementById('addDetails').innerHTML=d;
+
+const btn=document.getElementById('addBtn');
+if(exists){
+btn.textContent='✅ Already in Sheet';btn.style.background='#94a3b8';btn.disabled=true;
+}else{
+btn.textContent='Add to Google Sheet';btn.style.background='#6d28d9';btn.disabled=false;
+const url=getScriptUrl();
+document.getElementById('addSetup').style.display=url?'none':'block';
+}
+}
+
+async function submitSchool(){
+const url=getScriptUrl();
+if(!url){document.getElementById('addSetup').style.display='block';return;}
+if(!selectedSchool)return;
+
+const btn=document.getElementById('addBtn');
+btn.textContent='Adding...';btn.disabled=true;
+
+try{
+const resp=await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+body:JSON.stringify(selectedSchool)});
+document.getElementById('addStatus').innerHTML='<span style="color:#16a34a;font-weight:600">✅ Added! Click 🔄 Refresh to see it.</span>';
+btn.textContent='✅ Added';btn.style.background='#16a34a';
+}catch(e){
+document.getElementById('addStatus').innerHTML='<span style="color:#dc2626">Sent! If it doesn\'t appear, check the Apps Script setup.</span>';
+btn.textContent='Sent';btn.style.background='#f59e0b';
+}
+}
 const SHEET_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vTwNjVt3WufADla3dVggZr1uF06VmGsGqGBKxVP9n1uy3DeQ7vlOqPM9yWiQKNb6UU69DXHH77Dg_Hk/pub?output=csv';
 const MAGIC_HASH='185a5fa80036fefb7dc0ec56ced65d1cf04b41c25ef7221134a7a8b94efaca73';const TOKEN='6I9maYMnoFhq8WVXkmjKIQ';const AUTH_KEY='_cp27x';const PIN_KEY='_cp27pins';
 let DB=[],cSet=new Set(),activeI=-1,pins=new Set();
@@ -196,7 +349,7 @@ DB.push({n:r[0],s:r[1],cat:r[2],ch:r[3],cy:r[4],nsa:r[5],w:r[6],cr:r[7],co:r[8],
 css:r[10],me:r[11],ao:r[12],ad:r[13],dt:r[14],dr:r[15],af:r[16],
 applied:r[17]||'—',essay:r[18]||'—',supp:r[19]||'—',trans:r[20]||'—',recs:r[21]||'—',decision:r[22]||'—',
 comments:r[23]||'',url:r[24]||'',g:r[25]||''});}
-buildList();buildTicker();buildMonthPills();showWelcome();
+buildList();buildTicker();buildMonthPills();updateCatPills();showWelcome();
 }).catch(e=>{document.getElementById('list').innerHTML='<div class="loading" style="color:#ef4444">Failed to load. Publish sheet as CSV first.</div>';});
 }
 
@@ -251,7 +404,20 @@ ${s.h4?`<div class="field"><label>H-4 Waiver</label><p style="color:#16a34a;font
 ${s.comments?`<div class="card"><h3>💬 Comments</h3><p style="color:#475569">${s.comments}</p></div>`:''}`;
 }
 
-let collapsed={},activeMonth=null;
+let collapsed={},activeMonth=null,activeCat='all';
+
+function toggleCat(cat){
+activeCat=activeCat===cat?'all':cat;
+updateCatPills();buildList();
+}
+function updateCatPills(){
+['All','Safety','Match','Reach'].forEach(c=>{
+const el=document.getElementById('cat'+c);
+if(el){el.classList.toggle('active',(activeCat===c)||(activeCat==='all'&&c==='All'));}
+});
+const total=activeCat==='all'?DB.length:DB.filter(s=>s.cat===activeCat).length;
+document.getElementById('catCount').textContent=total+' schools';
+}
 
 const MONTHS=['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul'];
 const MONTH_MAP={aug:7,sep:8,oct:9,nov:10,dec:11,jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6};
@@ -301,8 +467,10 @@ function buildList(){
 const groups=[{l:'🏠 Georgia',id:'ga',f:s=>s.g==='Georgia'},{l:'🇺🇸 California',id:'ca',f:s=>s.g==='California'},{l:'🇺🇸 Texas',id:'tx',f:s=>s.g==='Texas'},{l:'🇺🇸 Florida',id:'fl',f:s=>s.g==='Florida'},{l:'🇺🇸 Other US',id:'ous',f:s=>s.g==='Other US'},{l:'🇺🇸 Private (CSS)',id:'css',f:s=>s.g==='Private CSS'},{l:'🌍 International',id:'intl',f:s=>s.g==='International'}];
 let h='';
 const monthFilter=activeMonth!==null;
+const catFilter=activeCat!=='all';
 groups.forEach(g=>{let sc=DB.map((s,i)=>({...s,i})).filter(g.f);
 if(monthFilter)sc=sc.filter(s=>isAccepting(s,activeMonth));
+if(catFilter)sc=sc.filter(s=>s.cat===activeCat);
 if(!sc.length)return;
 const isC=collapsed[g.id];
 h+=`<div class="sec-head" onclick="toggleSec('${g.id}')">${g.l} (${sc.length})<span class="arrow ${isC?'collapsed':''}">▼</span></div>`;
