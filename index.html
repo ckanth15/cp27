@@ -347,7 +347,7 @@ for(let i=1;i<rows.length;i++){const r=rows[i];if(r.length<10)continue;
 DB.push({n:r[0],s:r[1],cat:r[2],ch:r[3],cy:r[4],nsa:r[5],w:r[6],cr:r[7],co:r[8],h4:r[9],
 css:r[10],me:r[11],ao:r[12],ad:r[13],dt:r[14],dr:r[15],af:r[16],
 applied:r[17]||'—',essay:r[18]||'—',supp:r[19]||'—',trans:r[20]||'—',recs:r[21]||'—',decision:r[22]||'—',
-comments:r[23]||'',url:r[24]||'',g:r[25]||''});}
+comments:r[23]||'',url:r[24]||'',roi:r[25]||'',g:r[26]||''});}
 buildList();buildTicker();buildMonthPills();updateCatPills();showWelcome();
 }).catch(e=>{document.getElementById('list').innerHTML='<div class="loading" style="color:#ef4444">Failed to load. Publish sheet as CSV first.</div>';});
 }
@@ -400,7 +400,8 @@ ${s.h4?`<div class="field"><label>H-4 Waiver</label><p style="color:#16a34a;font
 <div class="field"><label>Decision</label><p style="font-size:14px">${s.decision}</p></div>
 </div>
 <p style="font-size:10px;color:#94a3b8;margin-top:10px">✏️ Edit tracking in <a href="https://docs.google.com/spreadsheets/d/1jXBB6CA8eVNcbR2mwu2xPWCdlo_lNjWfJNyGVO3io2c/edit" target="_blank" class="link">Google Sheet</a> → click 🔄 Refresh</p></div>
-${s.comments?`<div class="card"><h3>💬 Comments</h3><p style="color:#475569">${s.comments}</p></div>`:''}`;
+${s.comments?`<div class="card"><h3>💬 Comments</h3><p style="color:#475569">${s.comments}</p></div>`:''}
+${s.roi?`<div class="card"><h3>📈 ROI (Return on Investment)</h3><p style="color:#1e293b;font-size:14px;font-weight:600">${s.roi}</p></div>`:''}`;
 }
 
 let collapsed={},activeMonth=null,activeCat='all';
